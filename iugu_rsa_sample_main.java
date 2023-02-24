@@ -124,8 +124,15 @@ class IUGU_RSA_SAMPLE {
     return this.last_response;
   }
 
-  private boolean send_data(String method, String endpoint, String data) { // Link de referência: https://dev.iugu.com/reference/autentica%C3%A7%C3%A3o#d%C3%A9cimo-primeiro-passo
+  private int last_response_code = 0;
+
+  public int getLastResponseCode() {
+    return this.last_response_code;
+  }
+
+  private boolean send_data(String method, String endpoint, String data, int response_code_ok) { // Link de referência: https://dev.iugu.com/reference/autentica%C3%A7%C3%A3o#d%C3%A9cimo-primeiro-passo
     this.last_response = "";
+    this.last_response_code = 0;
     String request_time = this.get_request_time();
     String body = data;
     String signature =
@@ -160,10 +167,11 @@ class IUGU_RSA_SAMPLE {
         byte[] input = body.getBytes("utf-8");
         os.write(input, 0, input.length);
       }
-      ret = con.getResponseCode() == 200;
+      this.last_response_code = con.getResponseCode();
+      ret = this.last_response_code == response_code_ok;
 
       InputStream _is;
-      if (con.getResponseCode() < 400) {
+      if (this.last_response_code < 400) {
         _is = con.getInputStream();
       } else {
         _is = con.getErrorStream();
@@ -188,13 +196,13 @@ class IUGU_RSA_SAMPLE {
   public boolean signature_validate(String data) { // Link de referência: https://dev.iugu.com/reference/validate-signature
     String method = "POST";
     String endpoint = "/v1/signature/validate";
-    return this.send_data(method, endpoint, data);
+    return this.send_data(method, endpoint, data, 200);
   }
 
   public boolean transfer_requests(String data) {
     String method = "POST";
     String endpoint = "/v1/transfer_requests";
-    return this.send_data(method, endpoint, data);
+    return this.send_data(method, endpoint, data, 202);
   }
 }
 
@@ -223,9 +231,9 @@ public class iugu_rsa_sample_main {
       "}";
 
     if (iuru_rsa.signature_validate(json)) {
-      System.out.println("Response: " + iuru_rsa.getLastResponse());
+      System.out.println("Response: " + iuru_rsa.getLastResponseCode() + iuru_rsa.getLastResponse());
     } else {
-      System.out.println("Error: " + iuru_rsa.getLastResponse());
+      System.out.println("Error: " + iuru_rsa.getLastResponseCode() + iuru_rsa.getLastResponse());
     }
     // #####################################################################################################
 
@@ -247,9 +255,9 @@ public class iugu_rsa_sample_main {
       "}";
 
     if (iuru_rsa.transfer_requests(json2)) {
-      System.out.println("Response: " + iuru_rsa.getLastResponse());
+      System.out.println("Response: " + iuru_rsa.getLastResponseCode() + iuru_rsa.getLastResponse());
     } else {
-      System.out.println("Error: " + iuru_rsa.getLastResponse());
+      System.out.println("Error: " + iuru_rsa.getLastResponseCode() + iuru_rsa.getLastResponse());
     }
     // #####################################################################################################
 
