@@ -1,6 +1,13 @@
 // - O formato do arquivo de chave primária precisa estar em PKCS#8, para isso execute o seguinte comando no terminal:
 // openssl pkcs8 -topk8 -inform PEM -outform PEM -in private.pem -out private_pkcs8.pem -nocrypt
 
+// #####################################################################################################
+// #####################################################################################################
+// #####################################################################################################
+// ####################                       ATENÇÃO                 ##################################
+// Para efetuar a Assinatura de Requisições e Pix/TED-Out à partir de uma Subconta, sem uma Chave Criptografada, siga a documentação abaixo: 
+// https://dev.iugu.com/reference/rsawhitelabel
+
 // para executar:
 // - Altere a linha iuru_rsa.api_token, informando seu token
 // - Compile o arquivo com o comando abaixo:
@@ -8,9 +15,7 @@
 // - Execute o arquivo com o comando abaixo:
 // java iugu_rsa_sample_main
 
-// #####################################################################################################
-// #####################################################################################################
-// #####################################################################################################
+
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -236,9 +241,11 @@ public class iugu_rsa_sample_main {
       System.out.println("Error: " + iuru_rsa.getLastResponseCode() + iuru_rsa.getLastResponse());
     }
     // #####################################################################################################
-
+	//
     // #####################################################################################################
+	//
     //                                           transfer_requests
+	// Link de referência: https://dev.iugu.com/reference/transfer%C3%AAncia-para-terceiros-1 - Consulte esta FAQ caso tenha dúvidas na composição da requisição
     String json2 =
       "{" +
       "\"api_token\" : \"" +
