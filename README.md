@@ -15,7 +15,7 @@ que são:
 
 ### Criação das chaves pública e privada
 
-Para criação e configuração das chaves público e privada, siga a recomendações dos
+Para criação e configuração das chaves público e privada, siga as recomendações dos
 links:
 
 - https://dev.iugu.com/reference/autentica%C3%A7%C3%A3o
@@ -24,10 +24,11 @@ links:
 ### Utilizando a chave privada no seu projeto
 
 Existem várias abordagens para utilização de variáveis no ambiente num projeto Java. Como sugestão, podemos fazer
-o encode, em Base64, do conteúdo do arquivo da chave privada e utilizar o resultado num "gerenciador de segredos", como
-o Secrets Manager da AWS ou GCP, ou qualquer outro gerenciador que você já esteja utilizando. Essa abordagem facilitará
-a troca do segredo caso necessária e facilitará sua utilização, tornando desnecessária a manipulação de arquivos em
-tempo de execução.
+o encode, em Base64, do conteúdo do arquivo da chave privada e utilizar um "gerenciador de segredos", como
+o Secrets Manager da AWS ou GCP, ou qualquer outro gerenciador para armazená-lo.
+
+Essa abordagem facilitará a troca do segredo caso necessária e facilitará sua utilização, tornando desnecessária 
+a manipulação de arquivos em tempo de execução.
 
 Supondo que o valor está definido como uma variável de ambiente, podemos criar um método para recuperá-lo da seguinte
 forma:
@@ -55,12 +56,8 @@ Apenas para exemplo, vamos criar uma requisição de transferência de R$10 para
 
 ```java
 final TransferRequest transferRequest = new TransferRequest();
-transferRequest.
-
-setReceiverId("12345");
-transferRequest.
-
-setAmountCents(BigInteger.valueOf(10));
+transferRequest.setReceiverId("12345");
+transferRequest.setAmountCents(BigInteger.valueOf(10));
 ```
 
 Como o objetivo aqui é testar a chave, vamos chamar o método "/v1/signature/validate" utilizando essa request:
